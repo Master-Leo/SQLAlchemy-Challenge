@@ -45,7 +45,7 @@ def welcome():
         f"/api/v1.0/precipitation<br/>"
         f"/api/v1.0/stations<br/>"
         f"/api/v1.0/tobs<br/>"
-        f"/api/v1.0/<start>< and /api/v1.0/<start>/<end><br/>"
+        f"/api/v1.0/<start> and /api/v1.0/<start>/<end><br/>"
     )
 
 ###### the 'precipitation' route you will query and return the data Day 3 Activity 10
@@ -124,15 +124,35 @@ def temp_monthly():
 @app.route("/api/v1.0/temp/<start>/<end>")
 def stats(start=None, end=None):
     """Return TMIN, TAVG, TMAX."""
+    session = Session(engine)
+
+    start_date = dt.datetime.strptime(start, '%Y-%m-%d')
+    end_date = dt.datetime.strptime(end, '%Y-%m-%d')
 
     # Select statement
+    query_results = session.query(\
+        func.min(Measurement.tobs),\
+        func.avg(Measurement.tobs),\
+        func.max(Measurement.tobs)),\
+            filter(Measurement.date >= start_date).\
+            filter(Measurement.date <= end_date).all()
+            #group_by(Measurement.date).all()
 
 
-    # calculate TMIN, TAVG, TMAX with start and stop
-
+ # calculate TMIN, TAVG, TMAX with start and stop
+    final_list = []
+    for start_date, end_date, min, avg, max in query_results:
+        stat_dict = {}
+        stat_dict['State Date'] = start_date
+        stat_dict['End Date'] = end_date
+        stat_dict['TMIN'] = min
+        stat_dict['TAVG'] = avg
+        stat_dict['TMAX'] = max
+        final_list.append(stat_dict)
 
     # Unravel results into a 1D array and convert to a list
 
+    return jsonify(final_list)
 
 
 if __name__ == '__main__':
