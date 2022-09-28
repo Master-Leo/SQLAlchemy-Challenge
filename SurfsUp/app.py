@@ -123,37 +123,21 @@ def temp_monthly():
 @app.route("/api/v1.0/temp/<start>")
 @app.route("/api/v1.0/temp/<start>/<end>")
 def stats(start=None, end=None):
-    """Return TMIN, TAVG, TMAX."""
     session = Session(engine)
-
-    start_date = dt.datetime.strptime(start, '%Y-%m-%d')
-    end_date = dt.datetime.strptime(end, '%Y-%m-%d')
-
-    # Select statement
-    query_results = session.query(\
-        func.min(Measurement.tobs),\
-        func.avg(Measurement.tobs),\
-        func.max(Measurement.tobs)),\
-            filter(Measurement.date >= start_date).\
-            filter(Measurement.date <= end_date).all()
-            #group_by(Measurement.date).all()
-
-
- # calculate TMIN, TAVG, TMAX with start and stop
-    final_list = []
-    for start_date, end_date, min, avg, max in query_results:
-        stat_dict = {}
-        stat_dict['State Date'] = start_date
-        stat_dict['End Date'] = end_date
-        stat_dict['TMIN'] = min
-        stat_dict['TAVG'] = avg
-        stat_dict['TMAX'] = max
-        final_list.append(stat_dict)
-
-    # Unravel results into a 1D array and convert to a list
-
-    return jsonify(final_list)
-
+    """Return TMIN, TAVG, TMAX."""
+    # #  # calculate TMIN, TAVG, TMAX with start and stop
+    stat_results = [func.min(Measurement.tobs), func.avg(Measurement.tobs), func.max(Measurement.tobs)]
+    if not end:
+        results = session.query(*stat_results).\
+            filter(Measurement.date >= start).all()
+        temps = list(np.ravel(results))
+        return jsonify(temps=temps)
+    else:
+        results = session.query(*stat_results).\
+            filter(Measurement.date >= start).\
+            filter(Measurement.date <= end).all()
+        temps = list(np.ravel(results))
+        return jsonify(temps=temps)
 
 if __name__ == '__main__':
     app.run(debug=True)
