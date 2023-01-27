@@ -29,12 +29,22 @@
     - Queried the prev 12 months of TOBS data for that steation
     - Plotted the results as a histogram with bins=12
     
-  ## Climate App
-  > Created a Flask API based on the queries I just developed in the following steps:
-  1. / 
-    - Homepage
-    - Listed all available routes <br>
-  2. /api/v1.0/precipitation
-    - 
-  
+## Climate App
+> Created a Flask API based on the queries I just developed in the following steps:
+> 1.  / <br>
+  - Homepage
+  - Listed all available routes 
+2.  /api/v1.0/precipitation <br>
+  - Converted the query results from my precipitation analysis to a dictionary using *DATE* as the key and *PRCP* as the value
+  - Returned the JSON prepresentation of the dictionary
+3.  /api/v1.0/stations <br>
+  - Returned a JSON list of stations from the dataset
+4.  /api/v1.0/tobs <br>
+  - Queried the dates and temperatures observations of the most active station from the prev year of data
+  - Returned a JSON list of temperature obvservations for the prev year
+5.  /api/v1.0/<start> & /api/v1.0/<start>/<end> <br>
+  - Returned a JSON list of the *MIN* temperature, the *AVERAGE* temperature & the *MAX* temperature for a specified start or start-end range
+  - Calculated *TMIN, TAVG, and TMAX* for dates greater than or equal to the start date
+  - Given a start/end date, calculated *TMIN, TAVG, and TMAX* for the dates, inclusive
+
   
