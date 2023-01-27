@@ -23,7 +23,7 @@
   1. Designed a query to calculate the total number of stations in the dataset.
   2. Designed a query to find the most-active stations(most rows):
     - Listed the stations and observation counts in descending order
-  3. Designed a query that calculated the lowest, highest, aqnd average temperatures          that filtered the most active station id found inthe previous query
+  3. Designed a query that calculated the lowest, highest, aqnd average temperatures that filtered the most active station id found inthe previous query
   4. Designed aquery that retrieved prev 12 months of temperature observations data:
     - Filtered by the station that has the greatest number of observations
     - Queried the prev 12 months of TOBS data for that steation
@@ -31,7 +31,7 @@
     
 ## Climate App
 > Created a Flask API based on the queries I just developed in the following steps:
-> 1.  / <br>
+1.  / <br>
   - Homepage
   - Listed all available routes 
 2.  /api/v1.0/precipitation <br>
